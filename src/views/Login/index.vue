@@ -8,20 +8,20 @@
       <el-form :model="ruleForm" status-icon :rules="rules" label-position="top" ref="ruleForm"
         class="login-form" size="medium">
         <el-form-item label="邮箱" prop="username">
-          <el-input v-model="ruleForm.username" autocomplete="off"></el-input>
+          <el-input v-model="ruleForm.username" placeholder="请输入邮箱" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input show-password type="password" v-model="ruleForm.password" autocomplete="off">
+          <el-input show-password type="password" placeholder="请输入密码" v-model="ruleForm.password" autocomplete="off">
           </el-input>
         </el-form-item>
         <el-form-item label="重复密码" prop="passwords" v-show="model === 'register'">
-          <el-input show-password type="password" v-model="ruleForm.passwords" autocomplete="off">
+          <el-input show-password type="password" placeholder="请再次输入密码" v-model="ruleForm.passwords" autocomplete="off">
           </el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="code">
           <el-row :gutter="11">
             <el-col :span="15">
-              <el-input v-model.number="ruleForm.code"></el-input>
+              <el-input v-model.number="ruleForm.code" placeholder="请输入验证码"></el-input>
             </el-col>
             <el-col :span="9">
               <el-button @click="GetSmsReq()" :disabled="codeButtonStatic.dis" class="block"
