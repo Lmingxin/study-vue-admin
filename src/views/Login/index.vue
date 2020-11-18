@@ -11,17 +11,19 @@
           <el-input v-model="ruleForm.username" placeholder="请输入邮箱" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input show-password type="password" placeholder="请输入密码" v-model="ruleForm.password" autocomplete="off">
+          <el-input show-password type="password" placeholder="请输入密码" v-model="ruleForm.password"
+            autocomplete="off">
           </el-input>
         </el-form-item>
-        <el-form-item label="重复密码" prop="passwords" v-show="model === 'register'">
-          <el-input show-password type="password" placeholder="请再次输入密码" v-model="ruleForm.passwords" autocomplete="off">
+        <el-form-item label="重复密码" prop="passwords" v-if="model === 'register'">
+          <el-input show-password type="password" placeholder="请再次输入密码" v-model="ruleForm.passwords"
+            autocomplete="off">
           </el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="code">
           <el-row :gutter="11">
             <el-col :span="15">
-              <el-input v-model.number="ruleForm.code" placeholder="请输入验证码"></el-input>
+              <el-input v-model="ruleForm.code" placeholder="请输入验证码"></el-input>
             </el-col>
             <el-col :span="9">
               <el-button @click="GetSmsReq()" :disabled="codeButtonStatic.dis" class="block"
@@ -40,14 +42,15 @@
 </template>
 
 <script>
-
+import sha1 from 'js-sha1'
 import { onMounted,reactive,ref } from '@vue/composition-api'
 import { validateEmail,validatePass,validateVCode } from '@/utils/vaildate.js'
-import { GetSms } from '@/axios/api/login'
+import { GetSms,Register,Login } from '@/axios/api/login'
 export default {
   name: "login",
   setup(props,context) {  //主入口，data,生命周期，methods等
-    //定义数据
+
+    //定义数据=================================================================
     const menuTab=reactive([  //reactive创建响应式对象类型数据
       { text: "登录",current: true,type: "login" },
       { text: "注册",current: false,type: "register" },
@@ -80,13 +83,14 @@ export default {
     const i=ref(0)  //ref创建响应式基础类型数据
     console.log(menuTab);
     console.log(ruleForm); //.value获取值
+    const timer=ref(null);
 
-    //生命周期函数
-    onMounted(() => {
+    //生命周期函数=============================================================
+    onMounted(() => { })
 
-    })
+    //定义函数=================================================================
 
-    //定义函数
+    //登录、注册模块切换事件
     const toggleMenu=((data) => {
       console.log(data);
       menuTab.forEach((item,index) => {
@@ -94,19 +98,68 @@ export default {
       });
       data.current=true;
       model.value=data.type;
+      //恢复验证码按钮初始状态
+      clearInterval(timer.value);
+      codeButtonStatic.dis=false;
+      codeButtonStatic.text="获取验证码";
+      //重置表单
       context.refs["ruleForm"].resetFields();
     })
+
+    //表单提交事件
     const submitForm=((formName) => {
       context.refs[formName].validate((valid) => {
         if(valid) {
-          alert('submit!');
+          //发送注册请求
+          if(model.value=="register") {
+            if(ruleForm.passwords!=ruleForm.password) {
+              context.root.$message({
+                message: '请确认两次输入的密码是否一致',
+                type: 'error'
+              })
+              return
+            }
+            Register({
+              username: ruleForm.username,
+              password: sha1(ruleForm.password),
+              code: ruleForm.code,
+              module: model.value
+            }).then(res => {
+              console.log(res);
+              context.root.$message({
+                message: res.message,
+                type: 'success'
+              })
+              //注册成功，调用模块切换事件
+              toggleMenu(menuTab[0])
+            })
+          } else {
+            //发送登录请求
+            Login({
+              username: ruleForm.username,
+              password: sha1(ruleForm.password),
+              code: ruleForm.code,
+            }).then(res => {
+              context.root.$message({
+                message: res.message,
+                type: 'success'
+              })
+              //重置表单
+              context.refs["ruleForm"].resetFields();
+            });
+
+          }
         } else {
-          console.log('error submit!!');
+          console.log('请填写信息');
           return false;
         }
       });
     })
+
+    //获取验证码
     const GetSmsReq=(() => {
+
+      //判断邮箱格式是否有误
       if(ruleForm.username=='') {
         context.root.$message({
           message: '邮箱不能为空！',
@@ -121,29 +174,50 @@ export default {
         });
         return
       }
+      //改变验证码按钮状态
       codeButtonStatic.dis=true;
       codeButtonStatic.text="发送中";
 
+      //发送获取验证码请求
       GetSms({ username: ruleForm.username,module: model.value }).then(res => {
         console.log(res);
         context.root.$message({
           message: res.message,
           type: 'success'
         });
-        codeButtonStatic.dis=false;
-        codeButtonStatic.text="获取验证码";
       }).catch(e => {
         context.root.$message({
           message: e.message,
           type: 'error'
         });
-        codeButtonStatic.value=false;
-        codeButtonStatic.text="获取验证码";
       })
 
+      //开始倒计时
+      countDown(60);
+    })
+    //验证码倒计时
+    const countDown=((number) => {
 
+      //在某些情况下定时器已经有了，但是按钮还可点，就会出现多个定时器。会造成按钮倒计时数字的混乱
+      if(timer.value) clearInterval(timer.value);
+
+      let time=number;
+      timer.value=setInterval(() => {
+        time--;
+        if(time===0) {
+          clearInterval(timer.value);
+          codeButtonStatic.text="重新获取";
+          codeButtonStatic.dis=false;
+        } else {
+          codeButtonStatic.text=`倒计时${time}秒`
+        }
+
+        console.log(time);
+      },1000)
     })
 
+
+    //3.0    要在视图上使用的数据、方法必须return出去
     return {
       menuTab,
       toggleMenu,
