@@ -1,0 +1,30 @@
+//全局修改elementui样式
+
+.el-submenu.is-active.is-opened {
+	> .el-submenu__title svg {
+		//选中项父级的图标颜色
+		color: $textColor !important;
+	}
+	.el-menu.el-menu--inline {
+		//选中项的子级背景颜色
+		.el-menu-item {
+			background-color: rgb(42, 59, 76) !important;
+		}
+		//选中项的颜色
+		.el-menu-item.is-active {
+			background-color: $activeTextColor !important;
+			// color: $textColor !important;
+			> svg {
+				color: $textColor !important;
+			}
+		}
+	}
+}
+.el-menu .el-menu-item.is-active {
+	//1级菜单选中项颜色
+	background-color: $activeTextColor !important;
+	color: $textColor !important;
+	> svg {
+		color: $textColor !important;
+	}
+}

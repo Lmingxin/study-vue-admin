@@ -1,2 +1,6 @@
-@import "./config.scss"
-
+@import './config.scss';
+@import './config-elementui.scss';
+@import 'normalize.scss';
+body {
+	font-size: $fontSize;
+}

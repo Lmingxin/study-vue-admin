@@ -38,6 +38,7 @@ const routes = [
 				component: () => import('@/views/Console/index'),
 				meta: {
 					name: '首页',
+					icon: 'home',
 				},
 			},
 		],
@@ -49,6 +50,7 @@ const routes = [
 		dispatch: false,
 		meta: {
 			name: '信息管理',
+			icon: 'info',
 		},
 		children: [
 			{
@@ -87,6 +89,7 @@ const routes = [
 				component: () => import('@/views/User/index'),
 				meta: {
 					name: '用户列表',
+					icon: 'user',
 				},
 			},
 		],

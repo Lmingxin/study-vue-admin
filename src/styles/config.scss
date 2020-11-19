@@ -1,0 +1,16 @@
+//菜单栏颜色
+$navColor: #344a5f;
+$textColor: #f5f5f5f5;
+$activeTextColor: #f56c6c;
+
+$fontSize: 15px;
+// 主颜色
+// $mainCcolor: #f56c6c;
+
+//导出出去
+:export {
+	navColor: $navColor;
+	textColor: $textColor;
+	activeTextColor: $activeTextColor;
+	fontSize: $fontSize;
+}

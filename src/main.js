@@ -6,7 +6,7 @@ import store from './store'
 import ElementUI from 'element-ui'
 import Fragment from 'vue-fragment'
 import 'element-ui/lib/theme-chalk/index.css'
-
+import icons from '@/icons'
 Vue.config.productionTip = false
 Vue.use(Fragment.Plugin)
 Vue.use(VueCompositionApi)
