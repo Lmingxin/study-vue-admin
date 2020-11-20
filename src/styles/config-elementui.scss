@@ -20,6 +20,12 @@
 		}
 	}
 }
+.el-menu {
+	border-right: 0;
+}
+.el-menu--collapse {
+	width: auto;
+}
 .el-menu .el-menu-item.is-active {
 	//1级菜单选中项颜色
 	background-color: $activeTextColor !important;

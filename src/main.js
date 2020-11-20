@@ -7,10 +7,12 @@ import ElementUI from 'element-ui'
 import Fragment from 'vue-fragment'
 import 'element-ui/lib/theme-chalk/index.css'
 import icons from '@/icons'
+import routerInspect from '@/router/routerInspect'
 Vue.config.productionTip = false
 Vue.use(Fragment.Plugin)
 Vue.use(VueCompositionApi)
 Vue.use(ElementUI)
+
 new Vue({
 	router,
 	store,

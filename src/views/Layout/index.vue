@@ -1,5 +1,5 @@
 <template>
-  <div id="layout-wrap">
+  <div id="layout-wrap" :class="[menuStatus ? 'close' : 'open']">
     <NavLayout />
     <div id="content-wrap">
       <HeaderLayout />
@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { onMounted,reactive,ref,computed } from '@vue/composition-api'
 import HeaderLayout from './Components/Header'
 import NavLayout from './Components/Nav'
 import MainLayout from './Components/Main'
@@ -19,9 +20,14 @@ export default {
     NavLayout,
     MainLayout
   },
-  setup() {
-
+  setup(props,context) {
+    const menuStatus=computed(() => context.root.$store.getters.getIsCollapse);
+    return {
+      menuStatus
+    }
   }
+
+
 }
 </script>
 <style lang="scss" scoped>

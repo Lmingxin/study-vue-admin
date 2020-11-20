@@ -140,12 +140,17 @@ export default {
               password: sha1(ruleForm.password),
               code: ruleForm.code,
             }).then(res => {
-              context.root.$message({
-                message: res.message,
-                type: 'success'
-              })
+              // context.root.$message({
+              //   message: res.message,
+              //   type: 'success'
+              // })
+              console.log(res.data);
+              context.root.$store.dispatch("SET_USER_TOKEN",res.data)
+              context.root.$router.push({
+                name: "Index"
+              });
               //重置表单
-              context.refs["ruleForm"].resetFields();
+              // context.refs["ruleForm"].resetFields();
             });
 
           }

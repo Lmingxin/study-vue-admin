@@ -4,6 +4,13 @@ import Login from '@/views/Login/index'
 import Layout from '@/views/Layout/index'
 Vue.use(VueRouter)
 
+//vue-router3.0x以上版本。
+//回调形式已经改成promise api的形式了，返回的是一个promise，如果路由地址跳转相同, 会报错
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+	return originalPush.call(this, location).catch((err) => err)
+}
+
 const routes = [
 	{
 		path: '/',
@@ -29,6 +36,7 @@ const routes = [
 		alwaysShow: true,
 		meta: {
 			name: '首页',
+			icon: 'home',
 		},
 		children: [
 			{
@@ -80,6 +88,7 @@ const routes = [
 		component: Layout,
 		meta: {
 			name: '用户管理',
+			icon: 'user',
 		},
 		children: [
 			{
