@@ -3,7 +3,9 @@
     <NavLayout />
     <div id="content-wrap">
       <HeaderLayout />
-      <MainLayout />
+      <el-scrollbar class="scrollbar-wrapper">
+        <MainLayout />
+      </el-scrollbar>
     </div>
   </div>
 </template>
@@ -39,6 +41,23 @@ export default {
     flex: 1;
     display: flex;
     flex-direction: column;
+    .scrollbar-wrapper {
+      flex: 1;
+      overflow: hidden !important;
+      ::v-deep .el-scrollbar__wrap {
+        margin-bottom: 0 !important;
+        //   margin-right: 0;
+        overflow-x: auto;
+        //   height: 100%;
+        .el-scrollbar__view {
+          height: 100%;
+        }
+      }
+      // ::v-deep .el-scrollbar__thumb {
+      //   height: 55%;
+      //   transform: translateY(0%);
+      // }
+    }
   }
 }
 </style>
